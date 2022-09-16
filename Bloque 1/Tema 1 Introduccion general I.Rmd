@@ -187,7 +187,50 @@ En la parte inferior derecha de `RStudio` aparecen varias pestañas de nuevo: Fi
 
 La pestaña Plots es donde aparecerán las figuras que hagamos. En Packages aparecen los paquetes descargados. Help es una pestaña de consulta o ayuda. No te preocupes, iremos viendo todas las funcionalidades de RStudio a lo largo del curso, de forma intuitiva y natural.
 
-## Introducción a R: una primera aproximación al lenguaje de programación
+## Instalar y cargar paquetes
+
+Los paquetes de R son colecciones de funciones y datos que guardan algún tipo de relación entre sí.
+
+R tiene un sistema que se denomina "base", que contiene funciones básicas para análisis estadístico y visualización. Pero además de estas funciones básicas podemos extender la funcionalidad de R con los paquetes que hacen trabajos más específicos. Por ejemplo, existen paquetes para visualización de datos como ggplot2, para análisis geoespacial, analisis de datos ecologicos, para organizar datos, y para muchísimas cosas más.
+
+Los paquetes de `R` se encuentran alojados en `CRAN` (https://cran.r-project.org/), donde pasan controles antes de estar disponibles para el uso general.
+
+Existe la opción de crear tus propios paquetes, cuando tienes colecciones propias de funciones que quieres almacenar y compartir con el resto de la comunidad.
+
+Podemos instalar paquetes de diferentes formas. 
+
+Una es utilizando la función `install.packages()`. El nombre del paquete que queremos instalar debe ir entre comillas. Una vez instalado el paquete, la función que nos permite cargar esa librería se llama `library()`. Veamos algunos ejemplos y otras funciones que pueden ser interesantes.
+
+```{r Instalar y cargar paquetes, echo=TRUE, eval=FALSE}
+
+install.packages("vegan") # Para instalar un paquete
+
+library(vegan) # sirve para cargarlo en la sesión de R en la que estamos trabajando.
+
+(.packages()) # proporciona una lista de los paquetes cargados en este momento
+
+(.packages(all.available=TRUE)) # Devuelve la lista de paquetes disponibles
+
+# Podemos tratar de cargar la librería tree
+library (tree)  # pero este comando no funciona porque no está en nuestra lista de paquetes disponibles
+
+install.packages("tree") # Debemos instalar el paquete primero, y después cargarlo
+library(tree)#  ahora sí lo podemos cargar y no da error
+
+remove.packages("vegan") # elimina este paquete 
+
+(.packages(all.available=TRUE)) # Puedes comprobar que ya no aparece en la lista de paquetes disponibles
+```
+
+También podemos instalar paquetes utilizando el menú de `RStudio`: Tools > Install packages…
+
+O desde el panel de abajo a la derecha de `RStudio`: Packages/Install. Nos permite ver los paquetes que tenemos actualmente instalados y aquellos que se encuentran cargados.
+
+```{r Instalar y cargar paquetes2, echo=FALSE, out.width='60%', fig.cap= "Figura 14. Lista de paquetes instalados"}
+knitr::include_graphics('./images/tt_1_install_packages.png')
+```
+
+# Una primera aproximación al lenguaje de programación
 
 Una vez instalados R y Rstudio, podemos abrir el programa haciendo doble clic sobre el icono de Rstudio. De momento utilizaremos solo la consola. La consola es la herramienta principal del programa, donde nosotros vamos a escribir comandos y ejecutar operaciones.
 
@@ -265,50 +308,213 @@ Otros: exponencia, logaritmo, raíz cuadrada...
 log(10)
 sqrt(4)
 ```
-## Instalar y cargar paquetes
 
-Los paquetes de R son colecciones de funciones y datos que guardan algún tipo de relación entre sí.
+# Aprender a cargar y guardar datos.
 
-R tiene un sistema que se denomina "base", que contiene funciones básicas para análisis estadístico y visualización. Pero además de estas funciones básicas podemos extender la funcionalidad de R con los paquetes que hacen trabajos más específicos. Por ejemplo, existen paquetes para visualización de datos como ggplot2, para análisis geoespacial, analisis de datos ecologicos, para organizar datos, y para muchísimas cosas más.
+## Lectura e importación de datos
 
-Los paquetes de `R` se encuentran alojados en `CRAN` (https://cran.r-project.org/), donde pasan controles antes de estar disponibles para el uso general.
+Para poder proceder con un análisis de datos, debemos cargar los datos en `R`. En este tutorial aprenderemos a importar y exportar datos en diferentes formatos. Hemos seleccionado los más comunmente utilizados.
 
-Existe la opción de crear tus propios paquetes, cuando tienes colecciones propias de funciones que quieres almacenar y compartir con el resto de la comunidad.
+Podemos importar en formato texto o tabulares desde un archivo `.txt` o `.csv` Podemos importar directamente desde Excel, archivos `.xls` o `.xlxs` También existen formatos propios de R, como los `.Rdata` o `.rda` y los serialized `R` objects `.rds`
 
-Podemos instalar paquetes de diferentes formas. 
+Durante este tutorial vamos a utilizar de nuevo el conjunto o set de datos `iris`. Este conjunto de datos, como vimos en el video anterior, contiene datos sobre características florales de tres especies del género Iris.
 
-Una es utilizando la función `install.packages()`. El nombre del paquete que queremos instalar debe ir entre comillas. Una vez instalado el paquete, la función que nos permite cargar esa librería se llama `library()`. Veamos algunos ejemplos y otras funciones que pueden ser interesantes.
+Vamos a cargar el conjunto de datos `iris`, y a explorarlo brevemente antes de continuar. Para cargarlo utilizaremos la función `data()`, y lo exploraremos utilizando la función `head()` que nos permite visualizar las primeras 6 filas. También vamos a introducir nuevas funciones que nos permitirán explorar el conjunto de datos iris: `dim()` `colnames()` y `tail()`
 
-```{r Instalar y cargar paquetes, echo=TRUE, eval=FALSE}
-
-install.packages("vegan") # Para instalar un paquete
-
-library(vegan) # sirve para cargarlo en la sesión de R en la que estamos trabajando.
-
-(.packages()) # proporciona una lista de los paquetes cargados en este momento
-
-(.packages(all.available=TRUE)) # Devuelve la lista de paquetes disponibles
-
-# Podemos tratar de cargar la librería tree
-library (tree)  # pero este comando no funciona porque no está en nuestra lista de paquetes disponibles
-
-install.packages("tree") # Debemos instalar el paquete primero, y después cargarlo
-library(tree)#  ahora sí lo podemos cargar y no da error
-
-remove.packages("vegan") # elimina este paquete 
-
-(.packages(all.available=TRUE)) # Puedes comprobar que ya no aparece en la lista de paquetes disponibles
+```{r Lectura e importación de datos, echo=TRUE, eval= FALSE}
+data(iris)# para cargar los datos 
+?iris # consulta sobre el data set 
+head(iris) # muestra las primeras 6 filas de un data set 
+head(iris, n = 10) 
+dim(iris) # dimensiones del data set iris 
+tail(iris) # muestra las ultimas 6 filas de un data set 
+colnames(iris)# la funcion colnames() nos muestra los nombres de las variables de iris 
+names(iris) # la funcion names() nos muestra los nombres de las variables de iris
 ```
 
-También podemos instalar paquetes utilizando el menú de `RStudio`: Tools > Install packages…
+## Importar datos desde .csv
 
-O desde el panel de abajo a la derecha de `RStudio`: Packages/Install. Nos permite ver los paquetes que tenemos actualmente instalados y aquellos que se encuentran cargados.
+`CSV` significa “comma separated data”. El formato `.csv` es un caso particular de “tabular data” o “text data”
 
-```{r Instalar y cargar paquetes2, echo=FALSE, out.width='60%', fig.cap= "Figura 14. Lista de paquetes instalados"}
-knitr::include_graphics('./images/tt_1_install_packages.png')
+Vamos a practicar la siguiente secuencia: (1) EXPORTAR los datos `iris` en formato `.csv` en nuestro directorio de trabajo, (2) ELIMINAR los datos `iris` de nuestra sesión, (3) volver a IMPORTAR los datos `iris` desde nuestro directorio de trabajo.
+
+Para exportar `iris` a un fichero en formato `CSV` utilizaremos la función `write.csv()`. Debemos indicar el objeto que queremos exportar, en este caso será la colección de datos `iris`, y el nombre que queremos que tenga el archivo que generamos en nuestro directorio de trabajo.
+
+```{r Importar datos desde .csv, echo=TRUE, eval=FALSE}
+write.csv(iris, file = "iris.csv")
 ```
 
-## Estrategias de búsqueda de ayuda 
+Cuando trabajamos con proyectos es útil tener una carpeta exclusiva para datos, otra para codigo, otra para figuras, que nos faciliten la organización de nuestro trabajo. Por lo que vamos a guardar el `iris.csv` en la carpeta de datos de nuestro proyecto `iris`
+
+```{r Importar datos desde .csv2, echo=TRUE, eval=FALSE}
+write.csv(iris, file = "datos/iris.csv")
+```
+
+Para importar los datos podemos hacer dos cosas, eliminarlos de la sesión y luego volverlos a importar. O simplemente importarlos con un nombre diferente. Vamos primero a importarlos con un nombre diferente. La importación se realiza con la función `read.csv`. Recuerda, que debemos asignar la importación a un objeto, para que los datos se queden guardados en la sesión. Lo llamaremos `iris_import_csv`, y solamente deberíamos indicar la ruta donde se encuentran los datos
+
+```{r Importar datos desde .csv3, echo=TRUE, eval=FALSE} 
+iris_import_csv <- read.csv("datos/iris.csv")
+```
+
+Te propongo como ejercicio que borres los dos objetos, `iris` y `iris_import_csv` de la sesión, y los importes directamente desde nuestro directorio de trabajo. Te doy una pista, tendrás que utilizar la función `rm()` que vimos previamente y la función `read.csv()`
+
+## Importar datos desde Excell
+Importar datos desde Excell es muy parecido a la importación de datos desde `.csv`. Las funciones que utilizaremos son `write.xlsx()` para la exportación y `read.xlsx()` para la importación. Debemos instalar primero el paquete `xlsx`
+
+```{r Importar datos desde Excell, echo=TRUE, eval=FALSE}
+install.packages("xlsx") 
+library(xlsx) 
+write.xlsx(iris, "datos/iris.xlsx")  # acuerdate que los vamos a guardar en la carpeta datos 
+iris_import_xlsx <- read.xlsx("datos/iris.xlsx", 1) # debemos indicar la hoja de Excell desde la cual importar los datos
+```
+
+##  Formatos propios de R
+Existen formatos propios de `R` para guardar datos, sesiones y objetos concretos que hemos generado sin necesidad de recurrir a formatos `.txt`, `.csv`, o a `Excell`. Guardar los datos como objetos de `R` es muy util porque permite guardar la estructura de datos que nosotros generamos en `R` para nuestros análisis. Esa estructura se pierde cuando guardamos en formatos diferentes a los propios de `R`.
+
+Por ejemplo, nosotros definir las columnas de un set de datos en `R` como factor, integer, como character… al exportarlo esa estructura interna se perderá. Por eso es importante que una vez que estemos trabajando en los datos, los guardemos en formatos propios de `R`. Podemos reservar los otros formatos para almacenamiento de nuestros datos originales o “crudos” (del inglés “raw”).
+
+### Rdata
+Permite guardar una sesión completa, o seleccionar determinados objetos dentro de una sesión.
+
+Podemos guardar toda la sesión de trabajo con `save.image()`
+
+```{r Rdata, echo=TRUE, eval=FALSE} 
+save.image(file="datos/toda_la_sesion.RData")
+```
+
+También podemos guardar objetos concretos son `save()` pero tienes que indicar qué objetos de tu sesión quieres que guarde.
+
+```{r Rdata2, echo=TRUE, eval=FALSE} 
+save(iris, file="datos/iris_object_only.RData")
+```
+
+También puedes cargarlos después con `load()` (puedes limpiar tu sesión antes para comprobar que funciona bien)
+
+```{rRdata3, echo=TRUE, eval=FALSE} 
+load("datos/iris_object_only.RData")
+```
+
+Puedes cargar los datos con `load()` o también desde el menú de `RStudio` File > Open File
+
+### RDS
+
+El formato `.rds` nos permite guardar solamente un unico objeto, y la otra diferencia con un `.Rdata` es que no conserva el nombre de los objetos originales. Esto es una ventaja en muchas ocasiones, cuando estamos importando objetos y no queremos que nos limiten los nombres originales que les pusimos.
+
+Para exportar `iris` a formato RDS utilizamos la función `write_rds()`. Hay que indicarle un `path`. También debemos instalar el paquete `readr` previamente.
+
+```{r RDS, echo=TRUE, eval=FALSE} 
+install.packages("readr")
+library(readr)
+write_rds(iris, path="datos/iris.rds")
+```
+
+Para leer o importar datos `RDS` utilizamos la función `readRDS()` y asignarle un nombre al objeto que vayamos a crear:
+
+```{r RDS2, echo=TRUE, eval=FALSE} 
+iris_import_rds <- readRDS("datos/iris.rds")
+```
+
+# Manejo de directorios
+
+## Qué es un directorio
+
+Un directorio de trabajo es simplemente la carpeta o lugar de nuestro ordenador donde se encuentran ubicados los archivos con los que vamos a trabajar en `R`. Es decir, ahí estarán ubicados los datos que después importaremos en nuestra sesión de R. También es el lugar donde guardaremos nuestros códigos, exportaremos figuras y cualquier otro elemento que exportemos durante la sesión de trabajo.
+
+## Ubicación y cambios de directorio
+
+Para conocer dónde está ubicado el directorio de trabajo utilizamos la función `getwd()`. Solamente se escribe en la consola y se ejecuta.
+
+```{r Ubicación y cambios de directorio, echo=TRUE}
+getwd() # consultar dónde se ubica el directorio de trabajo
+```
+
+Podemos cambiar el directorio de trabajo de diferentes maneras. 
+
+Con la función `setwd()`. Habría que indicar la ruta donde se localiza el directorio de trabajo.
+
+```{r Ubicación y cambios de directorio2, echo=TRUE, eval=FALSE}
+setwd("C:\midirectorio") 
+```
+
+También podemos indicar el directorio utilizando el menú de `RStudio`: Session > Set Working Directory > Choose Directory 
+
+Otras funciones interesantes son `list.files()` y `list.dir()`. 
+
+La función `list.files()`, sin especificar ningún argumento, nos muestra una lista con los nombres de todos los archivos que hay dentro del directorio de trabajo. La función `dir()` hace exactamente lo mismo
+
+La función `list.dirs()`, sin especificar ningún argumento, nos muestra una lista de los directorios dentro del directorio de trabajo.
+
+```{r Ubicación y cambios de directorio3, echo=TRUE}
+# Ver archivos
+list.files()
+dir()
+```
+# Organizar el trabajo: sesiones, proyectos y más...
+## Sesiones
+### Qué es una sesión
+Cada vez que ejecutamos o abrimos `R` (o `RStudio`) estamos iniciando una sesión. Todos los objetos y funciones que generemos durante esa sesión se almacenan en la memoria RAM de nuestro ordenador. Es decir, esos objetos y funciones que creamos permanecen únicamente en nuestra sesión. 
+
+Cuando cerramos una sesión, por ejemplo de forma fortuita, los objetos almacenados en esa sesión se pierden. Para no perderlos debemos guardar la sesión en un archivo que tiene una extensión `.Rdata`. Ese archivo quedaría guardado en nuestro directorio de trabajo y disponible para la próxima sesión.
+
+### Cómo guardar una sesión
+
+Podemos guardar una sesión de varias maneras. Por ejemplo, desde el panel de arriba a la derecha, en la pestaña `Environment`. En el menú de `Environment`, vemos los objetos que tenemos guardados en la sesión (no tenemos ninguno todavía, por lo que debería estar vacío). Podríamos guardar esta sesión haciendo clic en el símbolo de guardar y dando un nombre a la sesión.
+
+También podemos guardar la sesión con la función `save.image()`. Veamos un ejemplo. Primero vamos a cargar una colección de datos que están disponibles en `R` con la función `data()`. Son los datos `iris`, muy conocidos porque se utilizan como ejemplo en muchos tutoriales de `R`.
+
+```{r Cómo guardar una sesión, echo=TRUE}
+data("iris") # cargamos el set de datos iris
+```
+
+Vemos que ahora ha aparecido un objeto en la pestaña `Environment` que se llama `iris`. Podemos explorar un poco este objeto con la función `head()` que nos mostrará las primeras 6 filas de ese set de datos y los nombres de las columnas.
+
+```{r Cómo guardar una sesión2, echo=TRUE}
+head(iris) # exploremos rápidamente el set de datos iris
+```
+
+Una función muy útil para conocer los objetos y funciones que contiene nuestra sesión es la función `ls()`. Nos muestra una lista con los nombres de todos los objetos que he guardado en la sesión. En este caso, solo tenemos un objeto guardado, el objeto `iris`.
+
+```{r Cómo guardar una sesión3, echo=TRUE}
+ls() 
+```
+
+Si ahora cerramos nuestra sesión, perderíamos el objeto `iris`. Podemos guardar la sesión en un archivo con extensión `.Rdata` en nuestro directorio de trabajo con la función `save.image()`. 
+
+```{r Cómo guardar una sesión4, echo=TRUE}
+save.image(file="miprimerasesion.RData")
+```
+
+Si te fijas ahora en tu directorio de trabajo, en `Files`, ha aparecido un archivo que se llama `miprimerasesion.Rdata`. Ese archivo contiene todos los objetos que has creado durante la sesión.
+
+### Notas:
+
+Podemos tener tener más de una sesión de R activa en la misma computadora.
+
+Podemos tener sesiones que compartan un mismo directorio de trabajo
+
+Los objetos y funciones de una sesión son exclusivos de esa sesión. No se comparten entre sesiones.
+
+Los códigos se guardan en el directorio de trabajo, no es una sesión. Si no los guardas de forma separada los perderás al cerrar la sesión.
+
+Se pueden eliminar todos los objetos de una sesión con la función `ls()`
+```{r Notas, echo=TRUE}
+rm(list=ls())  # elimina todos los objetos de una sesión
+```
+
+## Rprojects o proyectos de R
+
+Los proyectos de R o `Rproject` son una forma elegante y muy práctica de gestionar tus análisis de datos. Algunas ventajas son que facilitan compartir los análisis y la gestión de los proyectos de análisis que tengas en marcha. 
+
+Cada `Rproject` tiene su propio directorio de trabajo, su propia sesión o espacio de trabajo (environment), su historial de análisis. Lo más interesante es que permite crear una estructura de carpetas donde guardar los documentos asociados al proyecto en carpetas separadas (p.ej: una carpeta para datos, otra para figuras, otra para códigos…).
+
+Cuando trabajamos desde un `Rproject` en `RStudio` ocurre que:
+
+- Comienza una nueva sesión de `R`
+- El directorio de trabajo se fija a la carpeta que contiene el `Rproject`.
+
+Siempre que estemos trabajando en un proyecto que requiera una estructura de subcarpetas, merece la pena gestionarlo a través de un `Rproject`.
+
+# Estrategias de búsqueda de ayuda 
 
 En muchas ocasiones necesitaremos ayuda sobre los argumentos o funcionamiento de una función concreta, o simplemente porque nos encontramos frente a un error. Lo más común es llamar a la función de ayuda de `R` que es `help()`
 
@@ -339,7 +545,6 @@ Y por supuesto, existen infinidad de recursos en internet. En el siguiente apart
 
 
 ## Otros recursos y comunidades de ayuda
-
 
 ### Páginas generales
 
@@ -445,3 +650,4 @@ Y por supuesto, existen infinidad de recursos en internet. En el siguiente apart
 
 <blockquote class="twitter-tweet" data-lang="es"><p lang="en" dir="ltr">First module of SQL basics at <a href="https://twitter.com/udacity?ref_src=twsrc%5Etfw">@udacity</a> completed. It’s a relief to have learnt R and Java before. I’m advancing very quickly!</p>&mdash; Pablo Herrera (@pherreraariza) <a href="https://twitter.com/pherreraariza/status/1055774343765127168?ref_src=twsrc%5Etfw">26 de octubre de 2018</a></blockquote>
 <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+
